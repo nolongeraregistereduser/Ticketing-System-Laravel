@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoriesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::prefix('admin')->middleware(['auth'])->group(function () {
+        Route::get('/categories', [CategoriesController::class, 'index'])->name('admin.categories.index');
+        Route::get('/categories/create', [CategoriesController::class, 'create'])->name('admin.categories.create');
+        Route::post('/categories', [CategoriesController::class, 'store'])->name('admin.categories.store');
+        Route::get('/categories/{id}/edit', [CategoriesController::class, 'edit'])->name('admin.categories.edit');
+        Route::put('/categories/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/categories/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+    });
 });
 
 
