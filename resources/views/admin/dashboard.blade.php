@@ -14,17 +14,18 @@
 
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
-                <h3 class="text-lg font-semibold mb-2">Produits</h3>
+                <h3 class="text-lg font-semibold mb-2">Categories</h3>
                 <p class="text-3xl font-bold">75</p>
             </div>
         </div>
 
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
-                <h3 class="text-lg font-semibold mb-2">Commandes</h3>
+                <h3 class="text-lg font-semibold mb-2">Tickets</h3>
                 <p class="text-3xl font-bold">25</p>
             </div>
         </div>
+
 
         <!-- Tableau récent -->
         <div class="col-span-full bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
@@ -42,7 +43,7 @@
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">Nouvelle inscription</td>
-                                <td class="px-6 py-4 whitespace-nowrap">John Doe</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Simo Zouhairi</td>
                                 <td class="px-6 py-4 whitespace-nowrap">Il y a 2 heures</td>
                             </tr>
                             <!-- Ajoutez plus de lignes selon vos besoins -->
