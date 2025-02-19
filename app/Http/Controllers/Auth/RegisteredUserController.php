@@ -48,13 +48,19 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        switch ($user->role) {
-            case 'admin':
-                return redirect('/admin/dashboard');
-            case 'agent':
-                return redirect('/agent/dashboard');
-            default:
-                return redirect('/dashboard');
-        }
+        // switch ($user->role) {
+        //     case 'admin':
+        //         return redirect('/admin/dashboard');
+        //     case 'agent':
+        //         return redirect('/agent/dashboard');
+        //     default:
+        //         return redirect('/dashboard');
+        // }
+
+
+        return redirect(RouteServiceProvider::HOME);
     }
 }
+
+
+
