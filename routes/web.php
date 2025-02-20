@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\AdminTicketController; // Import the AdminTicketController
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,10 +57,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/categories/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
         Route::delete('/categories/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
 
-        // Admin ticket management
-        Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
-        Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
-        Route::post('/tickets/{ticket}/assign', [TicketController::class, 'assign'])->name('tickets.assign');
+        // Ticket management
+        Route::get('/tickets', [AdminTicketController::class, 'index'])->name('admin.tickets.index');
+        Route::get('/tickets/{ticket}/assign', [AdminTicketController::class, 'assign'])->name('admin.tickets.assign');
+        Route::post('/tickets/{ticket}/assign', [AdminTicketController::class, 'updateAssignment'])->name('admin.tickets.updateAssignment');
+        Route::get('/tickets/{ticket}/edit', [AdminTicketController::class, 'edit'])->name('admin.tickets.edit');
+        Route::put('/tickets/{ticket}/status', [AdminTicketController::class, 'updateStatus'])->name('admin.tickets.updateStatus');
     });
 });
 
