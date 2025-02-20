@@ -23,8 +23,8 @@ class TicketPolicy
      */
     public function view(User $user, Ticket $ticket): bool
     {
-        // Admins and agents can view all tickets
-        if ($user->isAdmin() || $user->isAgent()) {
+        // Admins can view all tickets
+        if ($user->role === 'admin') {
             return true;
         }
 
@@ -45,18 +45,8 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket): bool
     {
-        // Admins can update any ticket
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        // Assigned agents can update their tickets
-        if ($user->isAgent() && $ticket->assigned_to === $user->id) {
-            return true;
-        }
-
-        // Users can update their own tickets if they're not closed
-        return $user->id === $ticket->user_id && $ticket->status !== 'closed';
+        // Only admins can update tickets
+        return $user->role === 'admin' && $ticket->status !== 'closed';
     }
 
     /**
@@ -65,7 +55,7 @@ class TicketPolicy
     public function assign(User $user, Ticket $ticket): bool
     {
         // Only admins can assign tickets
-        return $user->isAdmin();
+        return $user->role === 'admin';
     }
 
     /**
@@ -74,6 +64,6 @@ class TicketPolicy
     public function delete(User $user, Ticket $ticket): bool
     {
         // Only admins can delete tickets
-        return $user->isAdmin();
+        return $user->role === 'admin';
     }
 }

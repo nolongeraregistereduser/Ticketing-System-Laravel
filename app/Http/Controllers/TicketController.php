@@ -20,8 +20,8 @@ class TicketController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         
-        if ($user->isAdmin() || $user->isAgent()) {
-            // Admins and agents can see all tickets
+        if ($user->role === 'admin') {
+            // Admins can see all tickets
             $tickets = Ticket::with(['creator', 'agent', 'category'])
                 ->latest()
                 ->paginate(10);
@@ -81,16 +81,16 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $this->authorize('update', $ticket);
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
         
-        if (!$ticket->canBeModified()) {
+        if ($ticket->status === 'closed') {
             return back()->with('error', 'Les tickets fermés ne peuvent pas être modifiés.');
         }
 
         $categories = Categories::all();
-        $agents = User::where('role', User::ROLE_AGENT)->get();
-        
-        return view('tickets.edit', compact('ticket', 'categories', 'agents'));
+        return view('tickets.edit', compact('ticket', 'categories'));
     }
 
     /**
@@ -98,9 +98,11 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        $this->authorize('update', $ticket);
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
 
-        if (!$ticket->canBeModified()) {
+        if ($ticket->status === 'closed') {
             return back()->with('error', 'Les tickets fermés ne peuvent pas être modifiés.');
         }
 
@@ -108,14 +110,8 @@ class TicketController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'status' => 'required|in:open,in_progress,closed',
-            'assigned_to' => 'nullable|exists:users,id'
+            'status' => 'required|in:open,in_progress,closed'
         ]);
-
-        // Check if ticket can be processed
-        if ($validated['status'] === 'in_progress' && !$ticket->canBeProcessed()) {
-            return back()->with('error', 'Le ticket doit être assigné à un agent avant d\'être traité.');
-        }
 
         $ticket->update($validated);
 
@@ -150,7 +146,10 @@ class TicketController extends Controller
      */
     public function close(Ticket $ticket)
     {
-        $this->authorize('update', $ticket);
+        // Only admin or ticket creator can close the ticket
+        if (auth()->user()->role !== 'admin' && auth()->id() !== $ticket->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         if ($ticket->status === 'closed') {
             return back()->with('error', 'Ce ticket est déjà fermé.');

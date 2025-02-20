@@ -59,12 +59,12 @@
                                                 <a href="{{ route('tickets.show', $ticket) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">
                                                     {{ __('Voir') }}
                                                 </a>
-                                                @if(auth()->user()->canManageTickets() && $ticket->status !== 'closed')
+                                                @if(auth()->user()->role === 'admin' && $ticket->status !== 'closed')
                                                     <a href="{{ route('tickets.edit', $ticket) }}" class="ml-4 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-600">
                                                         {{ __('Modifier') }}
                                                     </a>
                                                 @endif
-                                                @if($ticket->status !== 'closed')
+                                                @if($ticket->status !== 'closed' && (auth()->user()->role === 'admin' || auth()->id() === $ticket->user_id))
                                                     <form action="{{ route('tickets.close', $ticket) }}" method="POST" class="inline">
                                                         @csrf
                                                         <button type="submit" class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">

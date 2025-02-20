@@ -10,7 +10,7 @@
                         {{ __('Modifier') }}
                     </a>
                 @endif
-                @if($ticket->status !== 'closed' && (auth()->user()->role === 'admin' || auth()->id() === $ticket->user_id))
+                @if($ticket->status === 'open' && (auth()->user()->role === 'admin' || auth()->id() === $ticket->user_id))
                     <form action="{{ route('tickets.close', $ticket) }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
