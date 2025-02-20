@@ -5,12 +5,12 @@
                 {{ __('Ticket #') . $ticket->id }}
             </h2>
             <div class="flex space-x-4">
-                @if($ticket->status !== 'closed')
-                    @if(auth()->user()->canManageTickets())
-                        <a href="{{ route('tickets.edit', $ticket) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            {{ __('Modifier') }}
-                        </a>
-                    @endif
+                @if($ticket->status !== 'closed' && auth()->user()->role === 'admin')
+                    <a href="{{ route('tickets.edit', $ticket) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        {{ __('Modifier') }}
+                    </a>
+                @endif
+                @if($ticket->status !== 'closed' && (auth()->user()->role === 'admin' || auth()->id() === $ticket->user_id))
                     <form action="{{ route('tickets.close', $ticket) }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -81,7 +81,7 @@
                         </div>
                     </div>
 
-                    @if(auth()->user()->isAdmin() && $ticket->status !== 'closed')
+                    @if(auth()->user()->role === 'admin' && $ticket->status !== 'closed')
                         <!-- Assign Ticket Form -->
                         <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                             <h3 class="text-lg font-medium">{{ __('Assigner le Ticket') }}</h3>
@@ -90,9 +90,9 @@
                                 <div class="flex items-center gap-4">
                                     <select name="agent_id" class="rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600">
                                         <option value="">{{ __('Sélectionner un agent') }}</option>
-                                        @foreach(\App\Models\User::where('role', 'agent')->get() as $agent)
-                                            <option value="{{ $agent->id }}" {{ $ticket->assigned_to == $agent->id ? 'selected' : '' }}>
-                                                {{ $agent->name }}
+                                        @foreach(\App\Models\User::where('role', 'admin')->get() as $admin)
+                                            <option value="{{ $admin->id }}" {{ $ticket->assigned_to == $admin->id ? 'selected' : '' }}>
+                                                {{ $admin->name }}
                                             </option>
                                         @endforeach
                                     </select>

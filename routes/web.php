@@ -26,10 +26,6 @@ Route::get('/dashboard', function () {
 
 // Routes for regular users (role: user)
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
