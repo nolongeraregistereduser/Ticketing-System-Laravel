@@ -35,7 +35,7 @@ Route::middleware('auth', 'role:user')->group(function () {
 Route::middleware(['auth', 'role:agent'])->group(function () {
 
     Route::get('/agent/dashboard', function () {
-        return view('welcome agent');
+        return view('welcome.agent');
     });
 
 
