@@ -8,7 +8,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-lg font-semibold">Liste des Catégories</h2>
                 <a href="{{ route('admin.categories.create') }}" 
-                   class="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600">
+                   class="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-black  rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600">
                     <div class="flex items-center space-x-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>

@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Tickets') }}
             </h2>
-            <a href="{{ route('tickets.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('tickets.create') }}" class="bg-blue-500 hover:bg-blue-700 text-gray font-bold py-2 px-4 rounded">
                 {{ __('Nouveau Ticket') }}
             </a>
         </div>
@@ -72,6 +72,7 @@
                                                         </button>
                                                     </form>
                                                 @endif
+                                                {{-- Remove the delete button --}}
                                             </td>
                                         </tr>
                                     @endforeach

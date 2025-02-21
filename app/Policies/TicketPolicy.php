@@ -58,12 +58,19 @@ class TicketPolicy
         return $user->role === 'admin';
     }
 
-    /**
-     * Determine whether the user can delete the ticket.
-     */
+
     public function delete(User $user, Ticket $ticket): bool
     {
-        // Only admins can delete tickets
-        return $user->role === 'admin';
+        // Admin can delete any ticket
+        if ($user->role === 'admin') {
+            return true;
+        }
+
+        
+
+        // 1. Not in 'in_progress'  &&
+        // 2. own ticket 
+        return $user->id === $ticket->user_id && 
+               $ticket->status !== 'in_progress';
     }
 }

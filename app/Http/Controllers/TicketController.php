@@ -146,17 +146,31 @@ class TicketController extends Controller
      */
     public function close(Ticket $ticket)
     {
-        // Only admin or ticket creator can close the ticket
+        // Only admin or ticket creator can close the ticket if it's open
         if (auth()->user()->role !== 'admin' && auth()->id() !== $ticket->user_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        if ($ticket->status === 'closed') {
-            return back()->with('error', 'Ce ticket est déjà fermé.');
+        if ($ticket->status !== 'open') {
+            return back()->with('error', 'Vous ne pouvez fermer que les tickets ouverts.');
         }
-
+        
         $ticket->update(['status' => 'closed']);
 
         return back()->with('success', 'Ticket fermé avec succès.');
     }
+
+    // /**
+    //  * Delete the specified ticket
+    //  */
+    // public function destroy(Ticket $ticket)
+    // {
+    //     $this->authorize('delete', $ticket);
+
+    //     // Check if ticket is in progress (moved to policy)
+    //     $ticket->delete();
+
+    //     return redirect()->route('tickets.index')
+    //         ->with('success', 'Ticket supprimé avec succès.');
+    // }
 }

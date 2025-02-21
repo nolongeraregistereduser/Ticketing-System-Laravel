@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::post('/tickets/{ticket}/close', [TicketController::class, 'close'])->name('tickets.close');
+    Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
 });
 
 // Routes for admin only

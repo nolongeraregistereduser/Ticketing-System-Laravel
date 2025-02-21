@@ -37,12 +37,12 @@
 
                 <div class="flex items-center gap-4">
                     <button type="submit" 
-                            class="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600">
+                            class="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-black rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600">
                         Ajouter la catégorie
                     </button>
                     
                     <a href="{{ route('admin.categories.index') }}" 
-                       class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600">
+                       class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-black rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600">
                         Annuler
                     </a>
                 </div>
