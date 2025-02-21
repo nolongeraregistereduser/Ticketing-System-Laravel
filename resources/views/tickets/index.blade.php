@@ -65,13 +65,14 @@
                                                     </a>
                                                 @endif
                                                 @if($ticket->status !== 'closed' && (auth()->user()->role === 'admin' || auth()->id() === $ticket->user_id))
-                                                    <form action="{{ route('tickets.close', $ticket) }}" method="POST" class="inline">
+                                                    <form action="{{ route('tickets.close', $ticket) }}" method="POST" class="inline" onsubmit="return confirmClose('{{ $ticket->status }}');">
                                                         @csrf
                                                         <button type="submit" class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">
                                                             {{ __('Fermer') }}
                                                         </button>
                                                     </form>
                                                 @endif
+
                                                 {{-- Remove the delete button --}}
                                             </td>
                                         </tr>
@@ -87,4 +88,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function confirmClose(status) {
+            if (status === 'in_progress') {
+                alert('Vous ne pouvez pas fermer un ticket en cours de traitement.');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </x-app-layout>
