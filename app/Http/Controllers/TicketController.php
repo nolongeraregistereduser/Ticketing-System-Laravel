@@ -81,9 +81,9 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
+if (auth()->user()->role !== 'admin' && auth()->id() !== $ticket->user_id) {
+    abort(403, 'Unauthorized action.');
+}
         
         if ($ticket->status === 'closed') {
             return back()->with('error', 'Les tickets fermés ne peuvent pas être modifiés.');
@@ -98,9 +98,9 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
+if (auth()->user()->role !== 'admin' && auth()->id() !== $ticket->user_id) {
+    abort(403, 'Unauthorized action.');
+}
 
         if ($ticket->status === 'closed') {
             return back()->with('error', 'Les tickets fermés ne peuvent pas être modifiés.');
@@ -154,23 +154,40 @@ class TicketController extends Controller
         if ($ticket->status !== 'open') {
             return back()->with('error', 'Vous ne pouvez fermer que les tickets ouverts.');
         }
-        
+
         $ticket->update(['status' => 'closed']);
 
         return back()->with('success', 'Ticket fermé avec succès.');
     }
 
-    // /**
-    //  * Delete the specified ticket
-    //  */
-    // public function destroy(Ticket $ticket)
-    // {
-    //     $this->authorize('delete', $ticket);
+    public function editAgentTicket(Ticket $ticket)
+    {
+        if ($ticket->assigned_to !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
-    //     // Check if ticket is in progress (moved to policy)
-    //     $ticket->delete();
+        return view('tickets.agent_edit', compact('ticket'));
+    }
 
-    //     return redirect()->route('tickets.index')
-    //         ->with('success', 'Ticket supprimé avec succès.');
-    // }
+    public function updateAgentTicket(Request $request, Ticket $ticket)
+    {
+        if ($ticket->assigned_to !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:open,in_progress,closed'
+        ]);
+
+        $ticket->update(['status' => $request->status]);
+
+        return redirect()->route('agent.dashboard')
+            ->with('success', 'Ticket status updated successfully.');
+    }
+
+    public function agentDashboard()
+    {
+        $tickets = Ticket::where('assigned_to', auth()->id())->get();
+        return view('agent.dashboard', compact('tickets'));
+    }
 }

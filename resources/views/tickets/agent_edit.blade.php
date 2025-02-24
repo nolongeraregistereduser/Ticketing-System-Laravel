@@ -15,7 +15,11 @@
 
                         <div>
                             <x-input-label for="status" :value="__('Status')" />
-                            <x-text-input id="status" class="block mt-1 w-full" type="text" name="status" value="{{ $ticket->status }}" required autofocus />
+                            <select id="status" name="status" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="open" @if($ticket->status == 'open') selected @endif>Open</option>
+                                <option value="in_progress" @if($ticket->status == 'in_progress') selected @endif>In Progress</option>
+                                <option value="closed" @if($ticket->status == 'closed') selected @endif>Closed</option>
+                            </select>
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
 

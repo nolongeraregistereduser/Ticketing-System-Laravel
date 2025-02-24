@@ -79,3 +79,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::middleware(['auth', 'role:agent'])->prefix('agent')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\TicketController::class, 'agentDashboard'])->name('agent.dashboard');
+
+    Route::get('/tickets/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'editAgentTicket'])->name('agent.tickets.edit');
+    Route::put('/tickets/{ticket}', [App\Http\Controllers\TicketController::class, 'updateAgentTicket'])->name('agent.tickets.update');
+});
