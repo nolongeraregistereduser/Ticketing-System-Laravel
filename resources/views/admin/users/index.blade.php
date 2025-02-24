@@ -20,11 +20,15 @@
                         <td class="border px-4 py-2">{{ $user->name }}</td>
                         <td class="border px-4 py-2">{{ $user->email }}</td>
                         <td class="border px-4 py-2">
-                            <select name="role" onchange="updateRole({{ $user->id }}, this.value)">
-                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="agent" {{ $user->role == 'agent' ? 'selected' : '' }}>Agent</option>
-                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
-                            </select>
+                            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <select name="role" onchange="this.form.submit()">
+                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="agent" {{ $user->role == 'agent' ? 'selected' : '' }}>Agent</option>
+                                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                            </form>
                         </td>
                         <td class="border px-4 py-2">
                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;">
@@ -39,26 +43,4 @@
             </table>
         </div>
     </div>
-
-    <script>
-        function updateRole(userId, role) {
-            fetch(`/admin/users/${userId}/role`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ role: role })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Role updated successfully');
-                } else {
-                    alert('Failed to update role');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
 </x-admin-layout>

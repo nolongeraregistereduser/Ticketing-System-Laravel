@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminUsersManagementController extends Controller
 {
@@ -20,7 +21,20 @@ class AdminUsersManagementController extends Controller
 
     public function store(Request $request)
     {
-        // Validate and create user logic
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|string|in:admin,agent,user',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make('defaultpassword'), // Set a default password or implement a password field
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     public function edit(User $user)
@@ -30,7 +44,15 @@ class AdminUsersManagementController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // Validate and update user logic
+        $request->validate([
+            'role' => 'required|string|in:admin,agent,user',
+        ]);
+
+        $user->update([
+            'role' => $request->role,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'User role updated successfully.');
     }
 
     public function destroy(User $user)
