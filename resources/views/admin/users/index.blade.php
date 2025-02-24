@@ -42,7 +42,23 @@
 
     <script>
         function updateRole(userId, role) {
-            // Logic to update user role via AJAX or form submission
+            fetch(`/admin/users/${userId}/role`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ role: role })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Role updated successfully');
+                } else {
+                    alert('Failed to update role');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </x-admin-layout>

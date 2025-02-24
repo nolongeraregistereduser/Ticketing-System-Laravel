@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AdminTicketController; // Import the AdminTicketController
+use App\Http\Controllers\AdminUsersManagementController; // Import the new controller
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,8 +65,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/tickets/{ticket}/assign', [AdminTicketController::class, 'updateAssignment'])->name('admin.tickets.updateAssignment');
         Route::get('/tickets/{ticket}/edit', [AdminTicketController::class, 'edit'])->name('admin.tickets.edit');
         Route::put('/tickets/{ticket}/status', [AdminTicketController::class, 'updateStatus'])->name('admin.tickets.updateStatus');
+
+        // User management routes
+        Route::prefix('users')->group(function () {
+            Route::get('/', [AdminUsersManagementController::class, 'index'])->name('admin.users.index');
+            Route::get('/create', [AdminUsersManagementController::class, 'create'])->name('admin.users.create');
+            Route::post('/', [AdminUsersManagementController::class, 'store'])->name('admin.users.store');
+            Route::get('/{user}/edit', [AdminUsersManagementController::class, 'edit'])->name('admin.users.edit');
+            Route::patch('/{user}', [AdminUsersManagementController::class, 'update'])->name('admin.users.update');
+            Route::delete('/{user}', [AdminUsersManagementController::class, 'destroy'])->name('admin.users.destroy');
+        });
     });
 });
-
 
 require __DIR__.'/auth.php';
